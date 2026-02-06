@@ -1,82 +1,167 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>Happy Valentine's Day ❤️</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(to bottom, #ff5f7e, #ffc371);
-      color: white;
-      text-align: center;
-      height: 100vh;
-      overflow: hidden;
-    }
+<meta charset="UTF-8">
+<title>Pour Louna ❤️</title>
+<style>
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(to bottom, #ff5f7e, #ffc371);
+  color: white;
+  text-align: center;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
 
-    h1 {
-      margin-top: 100px;
-      font-size: 3em;
-    }
+h1 {
+  margin-top: 60px;
+  font-size: 3em;
+}
 
-    p {
-      font-size: 1.5em;
-    }
+h1 span {
+  display: inline-block;
+  animation: sparkle 1.5s infinite alternate;
+}
 
-    button {
-      padding: 15px 30px;
-      font-size: 1.2em;
-      border: none;
-      border-radius: 25px;
-      background: white;
-      color: #ff4d6d;
-      cursor: pointer;
-      margin-top: 20px;
-    }
+@keyframes sparkle {
+  0% { text-shadow: 0 0 5px #fff, 0 0 10px #ffb6c1, 0 0 15px #ff4d6d; }
+  100% { text-shadow: 0 0 10px #fff, 0 0 20px #ffb6c1, 0 0 30px #ff1a4d; }
+}
 
-    button:hover {
-      background: #ffe6eb;
-    }
+p {
+  font-size: 1.5em;
+  margin: 20px auto;
+  max-width: 450px;
+  animation: fadeIn 2s ease-in;
+}
 
-    .heart {
-      position: absolute;
-      color: white;
-      font-size: 20px;
-      animation: fall 5s linear infinite;
-    }
+@keyframes fadeIn { from {opacity:0;} to{opacity:1;} }
 
-    @keyframes fall {
-      0% {transform: translateY(-10px); opacity:1;}
-      100% {transform: translateY(100vh); opacity:0;}
-    }
-  </style>
+.button-container { margin-top: 30px; position: relative; }
+
+button {
+  padding: 15px 30px;
+  font-size: 1.2em;
+  border: none;
+  border-radius: 25px;
+  margin: 10px;
+  cursor: pointer;
+  transition: transform 0.3s, background 0.3s;
+  position: relative;
+}
+
+button:hover { transform: scale(1.2); }
+
+.yes { background: #ff4d6d; color: white; }
+.no { background: white; color: #ff4d6d; }
+
+.heart {
+  position: absolute;
+  font-size: 20px;
+  animation: fall linear infinite;
+  pointer-events: none;
+}
+.lshape {
+  position: absolute;
+  font-size: 20px;
+  color: #ff1a4d;
+  pointer-events: none;
+  animation: fall linear infinite;
+}
+
+@keyframes fall {
+  0% { transform: translateY(-10px) rotate(0deg); opacity:1; }
+  100% { transform: translateY(100vh) rotate(360deg); opacity:0; }
+}
+</style>
 </head>
 <body>
 
-  <h1>Happy Valentine's Day ❤️</h1>
-  <p>You make every day brighter ✨</p>
-  <button onclick="showMessage()">Click for a surprise 💝</button>
+<h1 id="title">Pour Louna ❤️</h1>
+<p>Tu es la lumière de ma vie, Louna. Veux-tu être ma Valentine et partager des moments magiques ensemble ? 💖</p>
 
-  <script>
-    function showMessage() {
-      alert("Will you be my Valentine? 💖");
-    }
+<div class="button-container">
+  <button class="yes" onclick="yesClick()">Oui 😍</button>
+  <button class="no" id="noBtn">Non 😢</button>
+</div>
 
-    function createHeart() {
-      const heart = document.createElement("div");
-      heart.classList.add("heart");
-      heart.innerHTML = "❤️";
-      heart.style.left = Math.random() * 100 + "vw";
-      heart.style.fontSize = Math.random() * 30 + 10 + "px";
-      document.body.appendChild(heart);
+<audio id="music" autoplay loop>
+  <source src="https://www.bensound.com/bensound-music/romantic.mp3" type="audio/mpeg">
+</audio>
 
-      setTimeout(() => {
-        heart.remove();
-      }, 5000);
-    }
+<script>
+// Sparkle each letter
+const title = document.getElementById("title");
+title.innerHTML = title.textContent.split('').map(c => `<span>${c}</span>`).join('');
 
-    setInterval(createHeart, 300);
-  </script>
+// Falling hearts
+function createHeart() {
+  const heart = document.createElement("div");
+  heart.classList.add("heart");
+  heart.innerHTML = "❤️";
+  heart.style.left = Math.random() * 100 + "vw";
+  heart.style.fontSize = (15 + Math.random() * 25) + "px";
+  heart.style.color = `hsl(${Math.random()*360}, 100%, 75%)`;
+  const duration = 4 + Math.random() * 3;
+  heart.style.animationDuration = duration + "s";
+  document.body.appendChild(heart);
+  setTimeout(() => heart.remove(), duration*1000);
+}
+setInterval(createHeart, 150);
+
+// Falling L's for Louna
+function createLShape() {
+  const l = document.createElement("div");
+  l.classList.add("lshape");
+  l.innerHTML = "💌";
+  l.style.left = Math.random() * 100 + "vw";
+  l.style.fontSize = (20 + Math.random()*20) + "px";
+  const duration = 4 + Math.random()*3;
+  l.style.animationDuration = duration + "s";
+  document.body.appendChild(l);
+  setTimeout(() => l.remove(), duration*1000);
+}
+
+// Yes click - explode hearts and L's
+function yesClick() {
+  for(let i=0;i<15;i++){createHeart(); createLShape();}
+  const msg = document.createElement("div");
+  msg.style.position = "fixed";
+  msg.style.top = "50%";
+  msg.style.left = "50%";
+  msg.style.transform = "translate(-50%, -50%)";
+  msg.style.fontSize = "2em";
+  msg.style.background = "#ff4d6d";
+  msg.style.padding = "20px 40px";
+  msg.style.borderRadius = "20px";
+  msg.style.boxShadow = "0 0 20px #fff";
+  msg.style.color = "white";
+  msg.innerHTML = "💖 Je suis tellement heureux que tu dis oui, Louna ! 💖";
+  document.body.appendChild(msg);
+  setTimeout(() => msg.remove(), 5000);
+}
+
+// Non button dodges
+const noBtn = document.getElementById("noBtn");
+noBtn.addEventListener("mouseover", function(){
+  const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+  const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+  noBtn.style.position = "absolute";
+  noBtn.style.left = x + "px";
+  noBtn.style.top = y + "px";
+});
+
+// Music fade in
+const music = document.getElementById("music");
+music.volume = 0;
+let vol = 0;
+const fadeInterval = setInterval(() => {
+  if(vol < 1){ vol += 0.01; music.volume = vol; } 
+  else { clearInterval(fadeInterval); }
+}, 200);
+</script>
 
 </body>
 </html>
