@@ -2,166 +2,242 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Pour Louna ❤️</title>
+<title>Pour Louna 💜</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
 body {
-  margin: 0;
-  font-family: 'Arial', sans-serif;
-  background: linear-gradient(to bottom, #ff5f7e, #ffc371);
-  color: white;
-  text-align: center;
-  height: 100vh;
-  overflow: hidden;
-  position: relative;
+  margin:0;
+  font-family: Arial, sans-serif;
+  color:white;
+  text-align:center;
+  overflow:hidden;
+  cursor:none;
+  background: linear-gradient(135deg,#240046,#9d4edd);
 }
 
-h1 {
-  margin-top: 60px;
-  font-size: 3em;
+/* Stars */
+.star {
+  position:fixed;
+  background:white;
+  border-radius:50%;
+  opacity:0.8;
+  animation: twinkle 3s infinite alternate;
 }
+@keyframes twinkle { from{opacity:.3;} to{opacity:1;} }
 
-h1 span {
-  display: inline-block;
-  animation: sparkle 1.5s infinite alternate;
+/* Petals */
+.petal {
+  position:fixed;
+  font-size:20px;
+  animation: fall 6s linear infinite;
 }
+@keyframes fall { from{top:-10%;} to{top:110%; opacity:0;} }
 
-@keyframes sparkle {
-  0% { text-shadow: 0 0 5px #fff, 0 0 10px #ffb6c1, 0 0 15px #ff4d6d; }
-  100% { text-shadow: 0 0 10px #fff, 0 0 20px #ffb6c1, 0 0 30px #ff1a4d; }
+h1 {margin-top:20px;font-size:2.3em;}
+.card {
+  background: rgba(255,255,255,0.15);
+  border-radius:20px;
+  padding:20px;
+  margin:15px auto;
+  width:90%;
+  max-width:500px;
+  box-shadow:0 0 20px rgba(255,255,255,0.3);
 }
-
-p {
-  font-size: 1.5em;
-  margin: 20px auto;
-  max-width: 450px;
-  animation: fadeIn 2s ease-in;
-}
-
-@keyframes fadeIn { from {opacity:0;} to{opacity:1;} }
-
-.button-container { margin-top: 30px; position: relative; }
 
 button {
-  padding: 15px 30px;
-  font-size: 1.2em;
-  border: none;
-  border-radius: 25px;
-  margin: 10px;
-  cursor: pointer;
-  transition: transform 0.3s, background 0.3s;
-  position: relative;
+  padding:12px 25px;
+  margin:10px;
+  font-size:1.1em;
+  border:none;
+  border-radius:30px;
+  cursor:pointer;
 }
 
-button:hover { transform: scale(1.2); }
+#yesBtn {background:#ff4fd8;color:white;}
+#noBtn {background:#333;color:white;position:absolute;}
 
-.yes { background: #ff4d6d; color: white; }
-.no { background: white; color: #ff4d6d; }
+.cursor {position:fixed;font-size:18px;pointer-events:none;}
 
-.heart {
-  position: absolute;
-  font-size: 20px;
-  animation: fall linear infinite;
-  pointer-events: none;
+.firework {
+  position:fixed;
+  font-size:30px;
+  animation:explode 1s ease-out forwards;
 }
-.lshape {
-  position: absolute;
-  font-size: 20px;
-  color: #ff1a4d;
-  pointer-events: none;
-  animation: fall linear infinite;
-}
+@keyframes explode { from{transform:scale(1);} to{transform:scale(4);opacity:0;} }
 
-@keyframes fall {
-  0% { transform: translateY(-10px) rotate(0deg); opacity:1; }
-  100% { transform: translateY(100vh) rotate(360deg); opacity:0; }
+#intro, #finalScreen {
+  position:fixed;
+  top:0;left:0;width:100%;height:100%;
+  background:linear-gradient(135deg,#240046,#9d4edd);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  z-index:1000;
+}
+#finalScreen {display:none;}
+
+#secret1,#secret2 {
+  display:none;
+  font-size:1.2em;
+  margin-top:15px;
+  color:#ffd6ff;
 }
 </style>
 </head>
+
 <body>
 
-<h1 id="title">Pour Louna ❤️</h1>
-<p>Tu es la lumière de ma vie, Louna. Veux-tu être ma Valentine et partager des moments magiques ensemble ? 💖</p>
-
-<div class="button-container">
-  <button class="yes" onclick="yesClick()">Oui 😍</button>
-  <button class="no" id="noBtn">Non 😢</button>
+<!-- Intro -->
+<div id="intro">
+  <h1>💜 Welcome Louna 💜</h1>
+  <p>Une surprise t’attend…</p>
+  <button onclick="start()">Entrer ✨</button>
 </div>
 
-<audio id="music" autoplay loop>
-  <source src="https://www.bensound.com/bensound-music/romantic.mp3" type="audio/mpeg">
+<h1 id="title">💜 Pour Louna 💜</h1>
+
+<audio id="music" loop>
+  <source src="https://www.bensound.com/bensound-music/bensound-slowmotion.mp3" type="audio/mpeg">
 </audio>
 
+<div class="card">
+  <p>Louna, née le 28 avril 💜<br>Toi qui aimes le violet, cette page est juste pour toi.</p>
+</div>
+
+<div class="card">
+  <h2>💌 Lettre d'amour</h2>
+  <p id="loveLetter"></p>
+</div>
+
+<div class="card">
+  <h2>✨ Fun things ✨</h2>
+  <ul style="text-align:left;">
+    <li>🌙 Regarder les étoiles</li>
+    <li>🍦 Glace violette</li>
+    <li>🎧 Musique ensemble</li>
+    <li>📱 Messages tard la nuit</li>
+    <li>💜 Nos souvenirs</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h2>Louna, will you be my Valentine? 💜</h2>
+  <button id="yesBtn" onclick="yesClicked()">Yes 💖</button>
+  <button id="noBtn" onmouseover="moveNo()">No 😢</button>
+</div>
+
+<div id="secret1">💜 Secret #1: You are my favorite miracle ✨</div>
+<div id="secret2">💫 Secret #2: I was brave just to make this for you, Louna 💜</div>
+
+<div id="finalScreen">
+  <h1>💍 I choose you, Louna 💜</h1>
+  <p>Merci d’avoir dit oui… ce moment est à nous ✨</p>
+</div>
+
 <script>
-// Sparkle each letter
-const title = document.getElementById("title");
-title.innerHTML = title.textContent.split('').map(c => `<span>${c}</span>`).join('');
+// Love letter typing
+const letterText=`Louna,
+Depuis que tu es entrée dans ma vie, tout est devenu plus doux.
+Tu es comme une lumière violette dans mes journées.
 
-// Falling hearts
-function createHeart() {
-  const heart = document.createElement("div");
-  heart.classList.add("heart");
-  heart.innerHTML = "❤️";
-  heart.style.left = Math.random() * 100 + "vw";
-  heart.style.fontSize = (15 + Math.random() * 25) + "px";
-  heart.style.color = `hsl(${Math.random()*360}, 100%, 75%)`;
-  const duration = 4 + Math.random() * 3;
-  heart.style.animationDuration = duration + "s";
-  document.body.appendChild(heart);
-  setTimeout(() => heart.remove(), duration*1000);
-}
-setInterval(createHeart, 150);
+J’aime ton sourire et la façon dont ton nom fait battre mon cœur.
+Chaque jour je pense à toi sans raison.
 
-// Falling L's for Louna
-function createLShape() {
-  const l = document.createElement("div");
-  l.classList.add("lshape");
-  l.innerHTML = "💌";
-  l.style.left = Math.random() * 100 + "vw";
-  l.style.fontSize = (20 + Math.random()*20) + "px";
-  const duration = 4 + Math.random()*3;
-  l.style.animationDuration = duration + "s";
-  document.body.appendChild(l);
-  setTimeout(() => l.remove(), duration*1000);
+Si l’amour avait une date, ce serait le 28 avril.
+Et s’il avait une couleur, ce serait le violet, parce que c’est toi.
+
+Merci d’être toi, Louna 💜`;
+
+let i=0;
+function typeLetter(){
+  if(i<letterText.length){
+    document.getElementById("loveLetter").innerHTML+=letterText.charAt(i);
+    i++; setTimeout(typeLetter,40);
+  }
 }
 
-// Yes click - explode hearts and L's
-function yesClick() {
-  for(let i=0;i<15;i++){createHeart(); createLShape();}
-  const msg = document.createElement("div");
-  msg.style.position = "fixed";
-  msg.style.top = "50%";
-  msg.style.left = "50%";
-  msg.style.transform = "translate(-50%, -50%)";
-  msg.style.fontSize = "2em";
-  msg.style.background = "#ff4d6d";
-  msg.style.padding = "20px 40px";
-  msg.style.borderRadius = "20px";
-  msg.style.boxShadow = "0 0 20px #fff";
-  msg.style.color = "white";
-  msg.innerHTML = "💖 Je suis tellement heureux que tu dis oui, Louna ! 💖";
-  document.body.appendChild(msg);
-  setTimeout(() => msg.remove(), 5000);
+// Intro
+function start(){
+  document.getElementById("intro").style.display="none";
+  document.getElementById("music").play();
+  typeLetter();
 }
 
-// Non button dodges
-const noBtn = document.getElementById("noBtn");
-noBtn.addEventListener("mouseover", function(){
-  const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
-  const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
-  noBtn.style.position = "absolute";
-  noBtn.style.left = x + "px";
-  noBtn.style.top = y + "px";
+// NO button runs away
+function moveNo(){
+  const no=document.getElementById("noBtn");
+  no.style.left=Math.random()*window.innerWidth*0.7+"px";
+  no.style.top=Math.random()*window.innerHeight*0.7+"px";
+}
+
+// Cursor hearts
+document.addEventListener("mousemove",e=>{
+  const c=document.createElement("div");
+  c.className="cursor";
+  c.innerHTML="💜";
+  c.style.left=e.pageX+"px";
+  c.style.top=e.pageY+"px";
+  document.body.appendChild(c);
+  setTimeout(()=>c.remove(),500);
 });
 
-// Music fade in
-const music = document.getElementById("music");
-music.volume = 0;
-let vol = 0;
-const fadeInterval = setInterval(() => {
-  if(vol < 1){ vol += 0.01; music.volume = vol; } 
-  else { clearInterval(fadeInterval); }
-}, 200);
+// Fireworks
+function firework(){
+  const f=document.createElement("div");
+  f.className="firework";
+  f.innerHTML="🎆";
+  f.style.left=Math.random()*100+"vw";
+  f.style.top=Math.random()*100+"vh";
+  document.body.appendChild(f);
+  setTimeout(()=>f.remove(),1000);
+}
+
+// YES button
+function yesClicked(){
+  document.getElementById("finalScreen").style.display="flex";
+  setInterval(firework,150);
+}
+
+// Stars
+for(let s=0;s<50;s++){
+  const star=document.createElement("div");
+  star.className="star";
+  star.style.width=star.style.height=Math.random()*3+2+"px";
+  star.style.left=Math.random()*100+"vw";
+  star.style.top=Math.random()*100+"vh";
+  document.body.appendChild(star);
+}
+
+// Petals
+setInterval(()=>{
+  const p=document.createElement("div");
+  p.className="petal";
+  p.innerHTML="🌸";
+  p.style.left=Math.random()*100+"vw";
+  document.body.appendChild(p);
+  setTimeout(()=>p.remove(),6000);
+},400);
+
+// Secret #1
+let clicks=0;
+document.getElementById("title").addEventListener("click",()=>{
+  clicks++;
+  if(clicks===5) document.getElementById("secret1").style.display="block";
+});
+
+// Secret #2 (hold YES)
+let holdTimer;
+const yesBtn=document.getElementById("yesBtn");
+yesBtn.addEventListener("mousedown",()=>{
+  holdTimer=setTimeout(()=>{
+    document.getElementById("secret2").style.display="block";
+  },3000);
+});
+yesBtn.addEventListener("mouseup",()=>clearTimeout(holdTimer));
 </script>
 
 </body>
 </html>
+
