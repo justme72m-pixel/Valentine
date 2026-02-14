@@ -12,28 +12,10 @@ body {
   color:white;
   text-align:center;
   background: linear-gradient(135deg,#240046,#9d4edd);
-  overflow-x:hidden; /* allow vertical scroll */
+  overflow-x:hidden; /* vertical scroll allowed */
 }
 
-/* Stars */
-.star {
-  position:fixed;
-  background:white;
-  border-radius:50%;
-  opacity:0.8;
-  animation: twinkle 3s infinite alternate;
-  pointer-events:none;
-}
-@keyframes twinkle { from{opacity:.3;} to{opacity:1;} }
-
-/* Petals */
-.petal {
-  position:fixed;
-  font-size:20px;
-  animation: fall 6s linear infinite;
-  pointer-events:none;
-}
-@keyframes fall { from{top:-10%;} to{top:110%; opacity:0;} }
+.star, .petal {pointer-events:none;}
 
 h1 {margin-top:20px;font-size:2.3em; z-index:10; position:relative;}
 
@@ -129,7 +111,7 @@ button {
 
 <div class="card">
   <h2>Louna, will you be my Valentine? 💜</h2>
-  <button id="yesBtn" onclick="yesClicked()">Yes 💖</button>
+  <button id="yesBtn">Yes 💖</button>
   <button id="noBtn" onmouseover="moveNo()">No 😢</button>
 </div>
 
@@ -200,10 +182,11 @@ function firework(){
 }
 
 // YES button
-function yesClicked(){
+const yesBtn = document.getElementById("yesBtn");
+yesBtn.addEventListener("click",()=>{
   document.getElementById("finalScreen").style.display="flex";
   setInterval(firework,150);
-}
+});
 
 // Stars
 for(let s=0;s<50;s++){
@@ -225,24 +208,36 @@ setInterval(()=>{
   setTimeout(()=>p.remove(),6000);
 },400);
 
-// Secret #1: click title 5 times
+// Secret #1: click/tap title 5 times
 let clicks = 0;
 const secret1 = document.getElementById("secret1");
 const title = document.getElementById("title");
-title.addEventListener("click", ()=>{
-  if(secret1.style.display === "block") return; // already revealed
+
+// Detect both desktop click & mobile tap
+title.addEventListener("click", ()=>{triggerSecret1();});
+title.addEventListener("touchstart", ()=>{triggerSecret1();});
+
+function triggerSecret1(){
+  if(secret1.style.display === "block") return;
   clicks++;
   if(clicks>=5) secret1.style.display="block";
-});
+}
 
-// Secret #2: hold YES 3 seconds
+// Secret #2: hold YES 3s (desktop + mobile)
 let holdTimer;
-const yesBtn=document.getElementById("yesBtn");
-yesBtn.addEventListener("mousedown",()=>{
-  holdTimer=setTimeout(()=>document.getElementById("secret2").style.display="block",3000);
-});
-yesBtn.addEventListener("mouseup",()=>clearTimeout(holdTimer));
+yesBtn.addEventListener("mousedown", startHold);
+yesBtn.addEventListener("touchstart", startHold);
+
+yesBtn.addEventListener("mouseup", cancelHold);
+yesBtn.addEventListener("touchend", cancelHold);
+
+function startHold(){
+  holdTimer = setTimeout(()=>{document.getElementById("secret2").style.display="block";}, 3000);
+}
+function cancelHold(){
+  clearTimeout(holdTimer);
+}
 </script>
 
 </body>
-</html>
+  </html>
