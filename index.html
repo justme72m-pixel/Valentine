@@ -11,9 +11,8 @@ body {
   font-family: Arial, sans-serif;
   color:white;
   text-align:center;
-  overflow:hidden;
-  cursor:none;
   background: linear-gradient(135deg,#240046,#9d4edd);
+  overflow-x:hidden; /* allow vertical scroll */
 }
 
 /* Stars */
@@ -23,6 +22,7 @@ body {
   border-radius:50%;
   opacity:0.8;
   animation: twinkle 3s infinite alternate;
+  pointer-events:none;
 }
 @keyframes twinkle { from{opacity:.3;} to{opacity:1;} }
 
@@ -31,10 +31,12 @@ body {
   position:fixed;
   font-size:20px;
   animation: fall 6s linear infinite;
+  pointer-events:none;
 }
 @keyframes fall { from{top:-10%;} to{top:110%; opacity:0;} }
 
-h1 {margin-top:20px;font-size:2.3em;}
+h1 {margin-top:20px;font-size:2.3em; z-index:10; position:relative;}
+
 .card {
   background: rgba(255,255,255,0.15);
   border-radius:20px;
@@ -43,6 +45,8 @@ h1 {margin-top:20px;font-size:2.3em;}
   width:90%;
   max-width:500px;
   box-shadow:0 0 20px rgba(255,255,255,0.3);
+  position:relative;
+  z-index:1;
 }
 
 button {
@@ -68,7 +72,8 @@ button {
 
 #intro, #finalScreen {
   position:fixed;
-  top:0;left:0;width:100%;height:100%;
+  top:0; left:0;
+  width:100%; height:100%;
   background:linear-gradient(135deg,#240046,#9d4edd);
   display:flex;
   flex-direction:column;
@@ -76,7 +81,7 @@ button {
   align-items:center;
   z-index:1000;
 }
-#finalScreen {display:none;}
+#finalScreen{display:none;}
 
 #secret1,#secret2 {
   display:none;
@@ -220,24 +225,24 @@ setInterval(()=>{
   setTimeout(()=>p.remove(),6000);
 },400);
 
-// Secret #1
-let clicks=0;
-document.getElementById("title").addEventListener("click",()=>{
+// Secret #1: click title 5 times
+let clicks = 0;
+const secret1 = document.getElementById("secret1");
+const title = document.getElementById("title");
+title.addEventListener("click", ()=>{
+  if(secret1.style.display === "block") return; // already revealed
   clicks++;
-  if(clicks===5) document.getElementById("secret1").style.display="block";
+  if(clicks>=5) secret1.style.display="block";
 });
 
-// Secret #2 (hold YES)
+// Secret #2: hold YES 3 seconds
 let holdTimer;
 const yesBtn=document.getElementById("yesBtn");
 yesBtn.addEventListener("mousedown",()=>{
-  holdTimer=setTimeout(()=>{
-    document.getElementById("secret2").style.display="block";
-  },3000);
+  holdTimer=setTimeout(()=>document.getElementById("secret2").style.display="block",3000);
 });
 yesBtn.addEventListener("mouseup",()=>clearTimeout(holdTimer));
 </script>
 
 </body>
 </html>
-
